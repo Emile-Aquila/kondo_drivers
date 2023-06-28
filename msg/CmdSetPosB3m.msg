@@ -1,0 +1,2 @@
+float32 target_pos
+uint16 move_time
