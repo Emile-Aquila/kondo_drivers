@@ -23,20 +23,27 @@ if(BUILD_TESTING)
 endif()
 
 
-## msg/srv generation
+# msg/srv generation
 file(GLOB ${PROJECT_NAME}_msg_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} msg/*)
 file(GLOB ${PROJECT_NAME}_srv_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} srv/*)
 rosidl_generate_interfaces(
         ${PROJECT_NAME}
         ${${PROJECT_NAME}_msg_files}
-#        ${${PROJECT_NAME}_srv_files}
+        ${${PROJECT_NAME}_srv_files}
         DEPENDENCIES ${${PROJECT_NAME}_FOUND_BUILD_DEPENDS}
 )
 
 
-## Component Settings
-ament_auto_add_library(kondo_driver_service_component SHARED src/kondo_driver_node.cpp src/b3m_commands.cpp)
-rclcpp_components_register_nodes(kondo_driver_service_component "kondo_drivers::KondoB3mDriverNode")
+# Component Settings
+## kondo_driver_node_component
+ament_auto_add_library(kondo_driver_node_component SHARED src/kondo_driver_node.cpp src/b3m_commands.cpp)
+rclcpp_components_register_nodes(kondo_driver_node_component "kondo_drivers::KondoB3mDriverNode")
+rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} rosidl_typesupport_cpp)
+target_link_libraries(kondo_driver_node_component "${cpp_typesupport_target}")
+
+## kondo_driver_service_component
+ament_auto_add_library(kondo_driver_service_component SHARED src/kondo_driver_service.cpp src/b3m_commands.cpp)
+rclcpp_components_register_nodes(kondo_driver_service_component "kondo_drivers::KondoB3mDriverService")
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} rosidl_typesupport_cpp)
 target_link_libraries(kondo_driver_service_component "${cpp_typesupport_target}")
 

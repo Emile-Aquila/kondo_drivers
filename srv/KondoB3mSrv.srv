@@ -1,0 +1,3 @@
+B3mServoMsg b3m_msg
+---
+bool is_success  # 動作に成功したらtrue
