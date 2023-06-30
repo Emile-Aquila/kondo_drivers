@@ -122,7 +122,7 @@ def generate_launch_description():
                     }]
                 ),
                 ComposableNode(
-                    package='main_arm_controller',
+                    package='catch23_robot_controller',
                     plugin='arm_controller::ArmControllerNode',
                     name='main_arm_controller_component',
                 )
