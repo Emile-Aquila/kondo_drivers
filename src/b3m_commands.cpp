@@ -65,3 +65,19 @@ SerialData generate_b3m_write_cmd(uint8_t servo_id, const kondo_drivers::msg::Cm
     });
     return serial_tx_cmd;
 }
+
+std::variant<B3M_response_data_normal, B3M_response_data_set_pos>
+        get_b3m_response_data(const std_msgs::msg::UInt8MultiArray& byte_array){
+    std::variant<B3M_response_data_normal, B3M_response_data_set_pos> ans;
+    if(byte_array.data.size() == 5){
+        if(byte_array.data[1] == 0x84){
+            ans = B3M_response_data_normal{byte_array.data[1], byte_array.data[2], byte_array.data[3]};
+        }
+    }else if(byte_array.data.size() == 7){
+        if(byte_array.data[1] == 0x86){
+            float pos = (float)(byte_array.data[5] + (byte_array.data[6] << 8)) / 100.0f;
+            ans = B3M_response_data_set_pos{{byte_array.data[1], byte_array.data[2], byte_array.data[3]}, pos};
+        }
+    }
+    return ans;
+}
