@@ -10,8 +10,7 @@ from ament_index_python.packages import get_package_share_directory
 import yaml
 
 from launch import LaunchDescription
-from launch.actions import (DeclareLaunchArgument, EmitEvent,
-                            RegisterEventHandler)
+from launch.actions import (DeclareLaunchArgument, EmitEvent, RegisterEventHandler)
 from launch.event_handlers import OnProcessStart
 from launch.event_handlers.on_shutdown import OnShutdown
 from launch.events import matches_action
