@@ -8,6 +8,7 @@
 #include <functional>
 #include <algorithm>
 #include <chrono>
+#include <map>
 #include <memory>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/u_int8_multi_array.hpp>
@@ -16,6 +17,7 @@
 #include <kondo_drivers/msg/cmd_set_pos_b3m.hpp>
 #include <kondo_drivers/msg/cmd_write_b3m.hpp>
 #include <kondo_drivers/srv/kondo_b3m_srv.hpp>
+#include <kondo_drivers/b3m_commands.hpp>
 
 
 namespace kondo_drivers{
@@ -27,10 +29,16 @@ namespace kondo_drivers{
     private:
         using b3m_srv = kondo_drivers::srv::KondoB3mSrv;
         using b3m_msg = kondo_drivers::msg::B3mServoMsg;
+        using serial_data = std_msgs::msg::UInt8MultiArray;
 
         rclcpp::Service<b3m_srv>::SharedPtr _b3m_service;
-        rclcpp::Publisher<std_msgs::msg::UInt8MultiArray>::SharedPtr _pub_serial;
+        rclcpp::Publisher<serial_data>::SharedPtr _pub_serial;
+        rclcpp::Subscription<serial_data>::SharedPtr _sub_serial;
+
+        std::map<uint8_t, B3M_COMMANDS> _received_datas;
+
         void _b3m_service_callback(std::shared_ptr<b3m_srv::Request> request, std::shared_ptr<b3m_srv::Response> response);
+        void _b3m_sub_callback(const serial_data& msg);
     };
 }
 

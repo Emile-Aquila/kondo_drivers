@@ -26,11 +26,11 @@ namespace kondo_drivers{
     private:
         using kondo_msg = kondo_drivers::msg::B3mServoMsg;
 
-
         rclcpp::Publisher<std_msgs::msg::UInt8MultiArray>::SharedPtr _pub_serial;
         rclcpp::Subscription<kondo_msg>::SharedPtr _sub_kondo;
 
         void _b3m_subscriber_callback(const kondo_msg &msg);
+        void _serial_subscriber_callback(const std_msgs::msg::UInt8MultiArray &msg);
     };
 }
 

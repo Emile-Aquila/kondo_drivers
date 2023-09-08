@@ -25,7 +25,7 @@ SerialData generate_b3m_set_pos_cmd(uint8_t servo_id, const kondo_drivers::msg::
 
     serial_tx_cmd.data.resize(9);
     serial_tx_cmd.data[0] = 0x09; // size
-    serial_tx_cmd.data[1] = 0x06; // cmd (0x06: POSITION)
+    serial_tx_cmd.data[1] = static_cast<uint8_t>(B3M_COMMANDS::POSITION); // cmd (0x06: POSITION)
     serial_tx_cmd.data[2] = 0x00; // option (0x00: ERROR_STATUを返す)
     serial_tx_cmd.data[3] = servo_id; // ID
     serial_tx_cmd.data[4] = (target_pos & 0xff); // pos_L
@@ -52,7 +52,7 @@ SerialData generate_b3m_write_cmd(uint8_t servo_id, const kondo_drivers::msg::Cm
 
     serial_tx_cmd.data.resize(8);
     serial_tx_cmd.data[0] = 0x08; // size
-    serial_tx_cmd.data[1] = 0x04; // cmd (0x04: WRITE)
+    serial_tx_cmd.data[1] = static_cast<uint8_t>(B3M_COMMANDS::WRITE); // cmd (0x04: WRITE)
     serial_tx_cmd.data[2] = 0x00; // option (0x00: ERROR_STATUを返す)
     serial_tx_cmd.data[3] = servo_id; // ID
     serial_tx_cmd.data[4] = write_cmd.txdata;
@@ -66,17 +66,17 @@ SerialData generate_b3m_write_cmd(uint8_t servo_id, const kondo_drivers::msg::Cm
     return serial_tx_cmd;
 }
 
-std::variant<B3M_response_data_normal, B3M_response_data_set_pos>
+std::variant<B3M_ResponseDataNormal, B3M_ResponseDataSetPos>
         get_b3m_response_data(const std_msgs::msg::UInt8MultiArray& byte_array){
-    std::variant<B3M_response_data_normal, B3M_response_data_set_pos> ans;
+    std::variant<B3M_ResponseDataNormal, B3M_ResponseDataSetPos> ans;
     if(byte_array.data.size() == 5){
         if(byte_array.data[1] == 0x84){
-            ans = B3M_response_data_normal{byte_array.data[1], byte_array.data[2], byte_array.data[3]};
+            ans = B3M_ResponseDataNormal{static_cast<B3M_COMMANDS>(byte_array.data[1]), byte_array.data[2], byte_array.data[3]};
         }
     }else if(byte_array.data.size() == 7){
         if(byte_array.data[1] == 0x86){
             float pos = (float)(byte_array.data[5] + (byte_array.data[6] << 8)) / 100.0f;
-            ans = B3M_response_data_set_pos{{byte_array.data[1], byte_array.data[2], byte_array.data[3]}, pos};
+            ans = B3M_ResponseDataSetPos{{static_cast<B3M_COMMANDS>(byte_array.data[1]), byte_array.data[2], byte_array.data[3]}, pos};
         }
     }
     return ans;
