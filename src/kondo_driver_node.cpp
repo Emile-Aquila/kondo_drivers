@@ -14,10 +14,9 @@ namespace kondo_drivers{
     KondoB3mDriverNode::KondoB3mDriverNode(const rclcpp::NodeOptions & options)
     : Node("b3m_driver_node_component", options) {
         _pub_serial = this->create_publisher<std_msgs::msg::UInt8MultiArray>("serial_write", 10);
-//        _sub_serial = this->create_subscription<std_msgs::msg::UInt8MultiArray>("serial_read", 10);
         using namespace std::placeholders;
 
-        _sub_kondo = this->create_subscription<kondo_msg>("kondo_b3m_topic",10,
+        _sub_kondo = this->create_subscription<kondo_msg>("b3m_topic", 10,
                        std::bind(&KondoB3mDriverNode::_b3m_subscriber_callback, this, std::placeholders::_1));
     }
 

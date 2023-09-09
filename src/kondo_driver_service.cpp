@@ -20,7 +20,7 @@ namespace kondo_drivers{
         using namespace std::placeholders;
         _pub_serial = this->create_publisher<serial_data>("serial_write", 10);
         _sub_serial = this->create_subscription<serial_data>("serial_read", 10, std::bind(&KondoB3mDriverService::_b3m_sub_callback, this, _1));
-        _b3m_service = this->create_service<b3m_srv>("kondo_b3m_service", std::bind(&KondoB3mDriverService::_b3m_service_callback, this, _1, _2));
+        _b3m_service = this->create_service<b3m_srv>("b3m_service", std::bind(&KondoB3mDriverService::_b3m_service_callback, this, _1, _2));
     }
 
     KondoB3mDriverService::~KondoB3mDriverService(){}

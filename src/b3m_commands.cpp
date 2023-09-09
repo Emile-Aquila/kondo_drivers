@@ -70,12 +70,16 @@ std::variant<B3M_ResponseDataNormal, B3M_ResponseDataSetPos>
         get_b3m_response_data(const std_msgs::msg::UInt8MultiArray& byte_array){
     std::variant<B3M_ResponseDataNormal, B3M_ResponseDataSetPos> ans;
     if(byte_array.data.size() == 5){
-        if(byte_array.data[1] == 0x84){
+        if(byte_array.data[1] == 0x84){  // WRITEコマンド
             ans = B3M_ResponseDataNormal{static_cast<B3M_COMMANDS>(byte_array.data[1]), byte_array.data[2], byte_array.data[3]};
         }
     }else if(byte_array.data.size() == 7){
-        if(byte_array.data[1] == 0x86){
-            float pos = (float)(byte_array.data[5] + (byte_array.data[6] << 8)) / 100.0f;
+        if(byte_array.data[1] == 0x86){  // SET POSコマンド
+            int tmp_value = byte_array.data[5] + (byte_array.data[6] << 8);
+            if(tmp_value & (1 << 15)){
+                tmp_value = -((tmp_value - 1) ^ (0xffff - 1));
+            }
+            float pos = (float)(tmp_value) / 100.0f;
             ans = B3M_ResponseDataSetPos{{static_cast<B3M_COMMANDS>(byte_array.data[1]), byte_array.data[2], byte_array.data[3]}, pos};
         }
     }
