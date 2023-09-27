@@ -8,6 +8,7 @@
 #include <functional>
 #include <algorithm>
 #include <chrono>
+#include <queue>
 #include <memory>
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/u_int8_multi_array.hpp>
@@ -25,12 +26,17 @@ namespace kondo_drivers{
         ~KondoB3mDriverNode();
     private:
         using kondo_msg = kondo_drivers::msg::B3mServoMsg;
+        using SerialData = std_msgs::msg::UInt8MultiArray;
 
         rclcpp::Publisher<std_msgs::msg::UInt8MultiArray>::SharedPtr _pub_serial;
         rclcpp::Subscription<kondo_msg>::SharedPtr _sub_kondo;
+        rclcpp::TimerBase::SharedPtr _timer_for_init;
+        std::queue<SerialData> _cmd_quque_for_init;
 
         void _b3m_subscriber_callback(const kondo_msg &msg);
         void _serial_subscriber_callback(const std_msgs::msg::UInt8MultiArray &msg);
+        void _timer_for_init_callback();
+        kondo_drivers::msg::B3mServoMsg gen_b3m_write_msg(uint8_t servo_id, uint8_t TxData, uint8_t address);
     };
 }
 

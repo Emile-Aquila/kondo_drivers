@@ -66,8 +66,7 @@ SerialData generate_b3m_write_cmd(uint8_t servo_id, const write_msg &write_cmd) 
     return serial_tx_cmd;
 }
 
-std::variant<B3M_ResponseDataNormal, B3M_ResponseDataSetPos>
-        get_b3m_response_data(const std_msgs::msg::UInt8MultiArray& byte_array){
+std::variant<B3M_ResponseDataNormal, B3M_ResponseDataSetPos> get_b3m_response_data(const std_msgs::msg::UInt8MultiArray& byte_array){
     std::variant<B3M_ResponseDataNormal, B3M_ResponseDataSetPos> ans;
     if(byte_array.data.size() == 5){
         if(byte_array.data[1] == 0x84){  // WRITEコマンド
