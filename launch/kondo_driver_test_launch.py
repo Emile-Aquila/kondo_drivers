@@ -25,7 +25,6 @@ from lifecycle_msgs.msg import Transition
 def generate_launch_description():
     """Generate launch description with multiple components."""
     share_dir_kondo = get_package_share_directory('kondo_drivers')
-    joy_dev = launch.substitutions.LaunchConfiguration('joy_dev')
 
     params_declare = DeclareLaunchArgument(
         'serial_params_file',
@@ -87,7 +86,6 @@ def generate_launch_description():
     )
 
     return launch.LaunchDescription([
-        launch.actions.DeclareLaunchArgument('joy_dev', default_value='/dev/input/js0'),  # device of joy
         params_declare,
         bridge_node,
         configure_event_handler,
@@ -99,33 +97,13 @@ def generate_launch_description():
             package='rclcpp_components',
             executable='component_container',
             composable_node_descriptions=[
-                # ComposableNode(
-                #     package="serial_driver",
-                #     plugin="drivers::serial_driver::SerialBridgeNode",
-                #     name="serial_driver_component",
-                #     parameters=[LaunchConfiguration('serial_params_file')],
-                # ),
                 ComposableNode(
                     package="kondo_drivers",
                     plugin="kondo_drivers::KondoB3mDriverNode",
                     name="kondo_b3m_driver_component",
                 ),
-                ComposableNode(
-                    package='joy',
-                    plugin='joy::Joy',
-                    name='joy_node_component',
-                    parameters=[{
-                        'dev': joy_dev,
-                        'deadzone': 0.3,
-                        'autorepeat_rate': 20.0,
-                    }]
-                ),
-                ComposableNode(
-                    package='catch23_robot_controller',
-                    plugin='arm_controller::ArmControllerNode',
-                    name='main_arm_controller_component',
-                )
             ],
-            output='screen',
+            output='both',
+            emulate_tty=True,
         ),
     ])
