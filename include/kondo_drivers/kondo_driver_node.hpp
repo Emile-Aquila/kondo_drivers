@@ -13,8 +13,8 @@
 #include <std_msgs/msg/u_int8_multi_array.hpp>
 #include <kondo_drivers/visibility.hpp>
 #include <kondo_drivers/msg/b3m_servo_msg.hpp>
-#include <kondo_drivers/msg/cmd_set_pos_b3m.hpp>
-#include <kondo_drivers/msg/cmd_write_b3m.hpp>
+#include <kondo_drivers/msg/b3m_set_pos_cmd.hpp>
+#include <kondo_drivers/msg/b3m_write_cmd.hpp>
 
 
 namespace kondo_drivers{

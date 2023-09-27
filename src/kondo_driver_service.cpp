@@ -32,11 +32,11 @@ namespace kondo_drivers{
 
         SerialData b3m_cmd_data, recv_data;
         switch(b3m_request.command_type){
-            case b3m_msg::CMD_WRITE_B3M:
+            case b3m_msg::CMD_WRITE:
                 b3m_cmd_data = generate_b3m_write_cmd(b3m_request.servo_id, b3m_request.cmd_write);
                 _pub_serial->publish(b3m_cmd_data);
                 break;
-            case b3m_msg::CMD_SET_POS_B3M:
+            case b3m_msg::CMD_SET_POS:
                 b3m_cmd_data = generate_b3m_set_pos_cmd(b3m_request.servo_id, b3m_request.cmd_set_pos);
                 _pub_serial->publish(b3m_cmd_data);
                 break;
@@ -50,9 +50,9 @@ namespace kondo_drivers{
 
 
         if(_received_datas.count(b3m_request.servo_id)){  // 何らかのserialのデータを受け取った時
-            if((b3m_request.command_type == b3m_msg::CMD_WRITE_B3M) && (_received_datas[b3m_request.servo_id] == B3M_COMMANDS::WRITE)){
+            if((b3m_request.command_type == b3m_msg::CMD_WRITE) && (_received_datas[b3m_request.servo_id] == B3M_COMMANDS::WRITE)){
                 return;
-            }else if((b3m_request.command_type == b3m_msg::CMD_SET_POS_B3M) && (_received_datas[b3m_request.servo_id] == B3M_COMMANDS::POSITION)){
+            }else if((b3m_request.command_type == b3m_msg::CMD_SET_POS) && (_received_datas[b3m_request.servo_id] == B3M_COMMANDS::POSITION)){
                 return;
             }else{
                 response->is_success = false;

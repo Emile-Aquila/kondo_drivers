@@ -28,11 +28,11 @@ namespace kondo_drivers{
         // TODO: b3mからのfbの扱い
         SerialData b3m_cmd_data;
         switch(msg.command_type){
-            case kondo_msg::CMD_WRITE_B3M:
+            case kondo_msg::CMD_WRITE:
                 b3m_cmd_data = generate_b3m_write_cmd(msg.servo_id, msg.cmd_write);
                 _pub_serial->publish(b3m_cmd_data);
                 break;
-            case kondo_msg::CMD_SET_POS_B3M:
+            case kondo_msg::CMD_SET_POS:
                 b3m_cmd_data = generate_b3m_set_pos_cmd(msg.servo_id, msg.cmd_set_pos);
                 _pub_serial->publish(b3m_cmd_data);
                 break;

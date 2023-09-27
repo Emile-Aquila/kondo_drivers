@@ -6,11 +6,11 @@
 #include <kondo_drivers/b3m_commands.hpp>
 
 using SerialData = std_msgs::msg::UInt8MultiArray;
-using set_pos_msg = kondo_drivers::msg::CmdSetPosB3m;
-using write_msg = kondo_drivers::msg::CmdWriteB3m;
+using set_pos_msg = kondo_drivers::msg::B3mSetPosCmd;
+using write_msg = kondo_drivers::msg::B3mWriteCmd;
 
 
-SerialData generate_b3m_set_pos_cmd(uint8_t servo_id, const kondo_drivers::msg::CmdSetPosB3m &set_pos_cmd){
+SerialData generate_b3m_set_pos_cmd(uint8_t servo_id, const set_pos_msg &set_pos_cmd){
     std_msgs::msg::UInt8MultiArray serial_tx_cmd;
     serial_tx_cmd.layout.data_offset = 0;
     serial_tx_cmd.layout.dim.resize(9);
@@ -41,7 +41,7 @@ SerialData generate_b3m_set_pos_cmd(uint8_t servo_id, const kondo_drivers::msg::
 }
 
 
-SerialData generate_b3m_write_cmd(uint8_t servo_id, const kondo_drivers::msg::CmdWriteB3m &write_cmd) {
+SerialData generate_b3m_write_cmd(uint8_t servo_id, const write_msg &write_cmd) {
     std_msgs::msg::UInt8MultiArray serial_tx_cmd;
     serial_tx_cmd.layout.data_offset = 0;
     serial_tx_cmd.layout.dim.resize(8);
